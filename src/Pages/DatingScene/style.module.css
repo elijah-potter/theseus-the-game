@@ -1,0 +1,6 @@
+@import "../../../public/fonts/silkscreen.css";
+
+.enemy {
+  width: 60%; 
+  image-rendering: pixelated;
+}

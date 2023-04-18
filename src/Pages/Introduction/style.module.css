@@ -1,0 +1,14 @@
+@import "../../../public/fonts/silkscreen.css";
+
+.text {
+  color: white;
+  font-size: 3rem;
+  font-family: silkscreen;
+  text-align: center;
+  width: clamp(70%, 700px, 90%);
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: gray;
+}

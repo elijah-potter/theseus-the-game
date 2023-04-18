@@ -1,0 +1,13 @@
+@font-face {
+  font-family: silkscreen;
+  src: url("./Silkscreen-Regular.ttf");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: silkscreen;
+  src: url("./Silkscreen-Bold.ttf");
+  font-weight: 700;
+}
+
