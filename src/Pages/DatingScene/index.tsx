@@ -4,17 +4,17 @@ import { motion } from "framer-motion";
 import ChatBox from "../../Components/ChatBox";
 import { useState } from "react";
 
-export type Emotion = "normal" | "embarrassed" | "angry";
+export type Emotion = "normal" | "embarrassed" | "angry" | "happy";
 
 export type Interaction = {
   prompt: string;
-  responses: [string?, string?];
+  responses: [string, string];
   emotion?: Emotion;
 };
 
 export type InteractionTreeNode = {
   interaction: Interaction;
-  children: [InteractionTreeNode, InteractionTreeNode] | null;
+  children: [InteractionTreeNode, InteractionTreeNode] | string;
 };
 
 const interactionTree: InteractionTreeNode = {
@@ -27,6 +27,7 @@ const interactionTree: InteractionTreeNode = {
       interaction: {
         prompt: "I love that name! What brings you to the town of Marathon?",
         responses: ["I seek to become king of Athens.", "Reasons."],
+        emotion: "happy",
       },
       children: [
         {
@@ -47,9 +48,10 @@ const interactionTree: InteractionTreeNode = {
                   interaction: {
                     prompt: "Oh hunka hunka. Wanna get out of here?",
                     responses: ["Oh for sure!", "Your place, or mine?"],
-                    emotion: "embarrassed",
+                    emotion: "happy",
                   },
-                  children: null,
+                  children:
+                    "Theseus and the Cow became lovers. They lived together until Theseus died of old age.",
                 },
                 {
                   interaction: {
@@ -60,7 +62,8 @@ const interactionTree: InteractionTreeNode = {
                       "You'll find someone someday!",
                     ],
                   },
-                  children: null,
+                  children:
+                    "The bull fell into a deep depression. Theseus continued on his journey and became Kind of Athens.",
                 },
               ],
             },
@@ -71,17 +74,81 @@ const interactionTree: InteractionTreeNode = {
                   "How do I get to Athens?",
                   "There are no boys like me.",
                 ],
+                emotion: "embarrassed",
               },
-              children: null,
+              children: [
+                {
+                  interaction: {
+                    prompt: "Just follow this road. Have a good one!",
+                    responses: ["Thanks!", "You too!"],
+                    emotion: "happy",
+                  },
+                  children:
+                    "The bull lived happily ever after, terrorizing the people of Marathon. Theseus continued on his journey and became Kind of Athens.",
+                },
+                {
+                  interaction: {
+                    prompt: "A cutie like you must have a girl back home.",
+                    responses: [
+                      "Her name is Aethra.",
+                      "I am a bachelor looking for some love.",
+                    ],
+                    emotion: "embarrassed",
+                  },
+                  children: [
+                    {
+                      interaction: {
+                        prompt: "She must be gorgeous. Do you have kids!",
+                        responses: ["She's my mom!", "Uhmm."],
+                        emotion: "happy",
+                      },
+                      children: "The cow walked away. Nothing happened.",
+                    },
+                    {
+                      interaction: {
+                        prompt:
+                          "So am I! But I only like guys that can beat me in a fight.",
+                        responses: ["So be it.", "I'm good enough!"],
+                      },
+                      children:
+                        "Theseus and the bull fought for hours. In the end, the bull won. After accidentally killing Theseus, it fell into depression and took it's own life.",
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },
         {
           interaction: {
             prompt: "A man of mystery, I like it.",
-            responses: [""],
+            responses: ["There is no bound to the darkness.", "..."],
+            emotion: "embarrassed",
           },
-          children: null,
+
+          children: [
+            {
+              interaction: {
+                prompt:
+                  "I have not done much to improve this world, but I will do this: I will kill you.",
+                responses: ["Okay then...", "I have nothing to lose."],
+                emotion: "happy",
+              },
+              children: "And so the bull made this world a little lighter.",
+            },
+            {
+              interaction: {
+                prompt: "Okay hot stuff. Say less.",
+                responses: [
+                  "Let's get out of here.",
+                  "I need someone to open up to..",
+                ],
+                emotion: "embarrassed",
+              },
+              children:
+                "The bull and Theseus started talking. They discovered they had a lot in common and decided to get married.",
+            },
+          ],
         },
       ],
     },
@@ -89,15 +156,19 @@ const interactionTree: InteractionTreeNode = {
       interaction: {
         prompt: "I hate that name.",
         responses: ["Okee...", "Screw you too."],
+        emotion: "angry",
       },
       children: [
         {
           interaction: {
             prompt:
               "I think we got off to a bad start. I am the terrible bull who wreaks upon this land of Marathon.",
-            responses: ["I have heard of you.", "Down with your head!"],
+            responses: [
+              "I know you, end this madness!",
+              "Down with your head!",
+            ],
           },
-          children: null,
+          children: "Theseus fought the bull. He killed it easily.",
         },
         {
           interaction: {
@@ -106,14 +177,19 @@ const interactionTree: InteractionTreeNode = {
             responses: ["So be it.", "Let's fight!"],
             emotion: "angry",
           },
-          children: null,
+          children:
+            "And so, the bull attacked Theseus. The bull did not survive.",
         },
       ],
     },
   ],
 };
 
-export default function ({ onComplete }: { onComplete?: () => void }) {
+export default function ({
+  onComplete,
+}: {
+  onComplete?: (endText: string) => void;
+}) {
   const [currentNode, setCurrentNode] = useState(interactionTree);
 
   let emotionScale;
@@ -124,6 +200,9 @@ export default function ({ onComplete }: { onComplete?: () => void }) {
       break;
     case "embarrassed":
       emotionScale = 0.8;
+      break;
+    case "happy":
+      emotionScale = 1.2;
       break;
     case "normal":
       emotionScale = 1;
@@ -146,10 +225,12 @@ export default function ({ onComplete }: { onComplete?: () => void }) {
         interaction={currentNode.interaction}
         name="The Cow"
         onResponse={(i) => {
-          if (currentNode.children != null) {
+          if (typeof currentNode.children === "string") {
+            if (onComplete != null) {
+              onComplete(currentNode.children);
+            }
+          } else {
             setCurrentNode(currentNode.children[i]);
-          } else if (onComplete != null) {
-            onComplete();
           }
         }}
       />
