@@ -8,11 +8,17 @@
 .title {
  font-family: silkscreen; 
  font-weight: normal;
- font-size: 10vmin;
+ font-size: 7vmin;
  white-space: pre;
  color: white;
  z-index: 100;
  text-shadow: 0 0 10px #000;
+}
+
+.subtitle {
+  font-family: silkscreen;
+  font-size: 2vmin;
+  color: white;
 }
 
 .cloud {
@@ -21,3 +27,5 @@
   height: 150px;
   position: absolute;
 }
+
+

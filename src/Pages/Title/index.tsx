@@ -19,6 +19,7 @@ export default function ({ onComplete }: { onComplete?: () => void }) {
 
     clouds.push(
       <motion.img
+        key={i.toString()}
         className={classes.cloud}
         src={`rendered/cloud-${Math.ceil(Math.random() * 2)}.webp`}
         initial={{
@@ -40,19 +41,20 @@ export default function ({ onComplete }: { onComplete?: () => void }) {
     <CenteringBackdrop color="#87CEEB">
       {clouds}
       <div className={classes.container}>
-        {"Theseus: The Game".split("").map((c) => (
+        {"Theseus: The Game".split("").map((c, index) => (
           <motion.h1
             className={classes.title}
             initial={{ scale: 1.1 }}
             animate={{ scale: 1 }}
             whileHover={{ scale: 1.2 }}
-            key={c}
+            key={index.toString()}
             transition={{ type: "spring", damping: 5, velocity: 2 }}
           >
             {c}
           </motion.h1>
         ))}
       </div>
+      <h2 className={classes.subtitle}>(click to start)</h2>
     </CenteringBackdrop>
   );
 }
