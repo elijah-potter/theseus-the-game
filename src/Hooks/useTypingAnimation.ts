@@ -1,4 +1,4 @@
-import { useAnimationFrame, useTime } from "framer-motion";
+import { useAnimationFrame } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export default function (text: string, waitInSeconds = 0) {
